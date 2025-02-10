@@ -25,4 +25,11 @@ public class CustomerService {
 	public List<Customer> getAllCustomer() {
 		return customerRepository.findAll();
 	}
+	public Customer updateCustomerById(int custid, Customer c2) {
+		Customer dbValues = getCustomerById(custid);
+		dbValues.setCustEmail(c2.getCustEmail());
+		dbValues.setCustGender(c2.getCustGender());
+		dbValues.setCustName(c2.getCustName());
+		return customerRepository.save(dbValues);
+	}
 }

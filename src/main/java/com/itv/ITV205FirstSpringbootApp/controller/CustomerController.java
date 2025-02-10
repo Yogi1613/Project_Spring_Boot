@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,7 +46,7 @@ public class CustomerController {
 		return customerService.addCustomer(c1);
 
 	}
-
+	
 	@PostMapping("/addCustomerByRequestbody")
 	public Customer addCustomerByRequestbody(@RequestBody Customer c1) {
 		return customerService.addCustomer(c1);
@@ -70,9 +71,12 @@ public class CustomerController {
 	}
 	@GetMapping("/getCustomerById/{id}")
 	public Customer getCustomerById(@PathVariable("id") int custid) {
-		
-		
 		return customerService.getCustomerById(custid);
+	}
+	@PutMapping("/updateCustomerById/{id}")
+	public Customer updateCustomerById(@PathVariable("id") int custid, @RequestBody Customer c2) {
+	return customerService.updateCustomerById(custid,c2);
 
+		
 	}
 }

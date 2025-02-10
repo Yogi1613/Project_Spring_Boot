@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player Registration Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:ital,wght@1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Dancing Script', cursive;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      min-height: 100vh;
+      color: #333;
+      overflow-x: hidden;
+      position: relative;
+      height: 100%;
+    }
+
+    video.background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 500px;
+      background: linear-gradient(135deg, rgba(34, 193, 195, 0.9), rgba(253, 187, 45, 0.9));
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1s ease-in-out;
+      position: relative;
+      margin-left: 50px;
+      overflow-y: auto;
+      max-height: 95vh;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      font-family: 'Dancing Script', cursive;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+      color: #fff;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #fff;
+      font-family: 'Inconsolata', monospace;
+      font-style: italic;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      font-family: 'Inconsolata', monospace;
+      font-style: italic;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #ff4b2b;
+      box-shadow: 0 0 8px rgba(255, 75, 43, 0.4);
+      outline: none;
+    }
+
+    input[type="submit"] {
+      font-family: 'Inconsolata', monospace;
+      font-style: italic;
+      background: linear-gradient(135deg, #ff4b2b, #ff416c);
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      padding: 12px 20px;
+      border-radius: 8px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    input[type="submit"]:hover {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      transform: scale(1.05);
+    }
+
+    .form-footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #fff;
+      font-family: 'Inconsolata', monospace;
+      font-style: italic;
+    }
+
+    .form-footer a {
+      color: #ffdedb;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .range-container {
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      font-family: 'Inconsolata', monospace;
+      font-style: italic;
+    }
+
+    .range-container span {
+      font-weight: bold;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin: 10px 0;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 5px;
+      background: #ddd;
+      border-radius: 18px;
+      outline: none;
+      transition: background 0.3s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ff4b2b;
+      cursor: pointer;
+    }
+
+    input[type="range"]:focus::-webkit-slider-thumb {
+      box-shadow: 0 0 8px rgba(255, 75, 43, 0.4);
+    }
+
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #34c1c1, #ff5733);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #ff5733, #34c1c1);
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    @media (max-width: 600px) {
+      .form-container {
+        padding: 20px;
+      }                                                      
+
+      h2 {
+        font-size: 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <video class="background-video" autoplay muted loop>
+    <source src="https://raw.githubusercontent.com/Yogi1613/images-for-project/main/sports-video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="form-container">
+    <h2>Player Registration Form</h2>
+    <form th:action="@{/addPlayerByRequestBody}" th:object="${myplayer}" method="post">
+      <label for="player-name">Player Name:</label>
+      <input type="text" id="player-name" th:field="*{playerName}" placeholder="Enter player's name" required>
+
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" th:field="*{playerEmail}" placeholder="Enter email address" required>
+
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" th:field="*{playerPhone}" placeholder="Enter phone number" required>
+
+      <label for="dob">Date of Birth:</label>
+      <input type="date" id="dob" th:field="*{dob}" required>
+
+      <label for="gender">Gender:</label>
+      <select id="gender" th:field="*{gender}" required>
+        <option value="" disabled>Select gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="position">Player Position:</label>
+      <select id="position" th:field="*{position}" required>
+        <option value="" disabled>Select position</option>
+        <option value="forward">Forward</option>
+        <option value="midfielder">Midfielder</option>
+        <option value="defender">Defender</option>
+        <option value="goalkeeper">Goalkeeper</option>
+      </select>
+
+      <label for="skill-level">Skill Level:</label>
+      <select id="skill-level" th:field="*{skillLevel}" required>
+        <option value="" disabled>Select skill level</option>
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+        <option value="professional">Professional</option>
+      </select>
+
+      <label for="team-affiliation">Team Affiliation:</label>
+      <input type="text" id="team-affiliation" th:field="*{teamAffiliation}" placeholder="Enter current team name (if any)">
+
+      <label for="bio">Player Bio:</label>
+      <textarea id="bio" th:field="*{playerBio}" rows="4" placeholder="Briefly describe yourself"></textarea>
+
+      <div class="range-container">
+        <label for="fitness-level">Fitness Level: <span id="range-value">1</span></label>
+        <input type="range" id="fitness-level" th:field="*{fitnessLevel}" min="1" max="10" value="1" oninput="document.getElementById('range-value').textContent = this.value;">
+      </div>
+      <label for="accept-terms">
+        <input type="checkbox" id="accept-terms" name="accept-terms" required> I agree to the terms and conditions
+      </label>
+
+      <input type="submit" value="Register Player">
+    </form>
+
+    <div class="form-footer">
+      <p>Have an account? <a href="#">Login here</a></p>
+    </div>
+  </div>
+</body>
+</html>
